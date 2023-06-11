@@ -1,6 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
@@ -20,9 +24,21 @@ public class ServerThread extends Thread{
 		super.run();
 		try {
 			fetchQuestions();
+			handleTriviaQuestions();
 		} catch(Exception e) {
 			
 		}
+	}
+	
+	private void handleTriviaQuestions() throws Exception {
+		OutputStream outputStream = s.getOutputStream();
+		ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
+//		InputStream inputStream = s.getInputStream();
+//		ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+		
+		// send questions to the client
+	    objOutputStream.writeObject(questions);
+	    objOutputStream.flush();
 	}
 	
 	

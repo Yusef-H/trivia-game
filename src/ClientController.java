@@ -15,6 +15,12 @@ public class ClientController {
 
     @FXML
     private Label firstAnswer;
+    
+    @FXML
+    private Label secondAnswer;
+
+    @FXML
+    private Label thirdAnswer;
 
     @FXML
     private Label fourthAnswer;
@@ -35,16 +41,15 @@ public class ClientController {
     private RadioButton radio4;
 
     @FXML
-    private Label secondAnswer;
-
-    @FXML
-    private Label thirdAnswer;
-
-    @FXML
     private Text timer;
 
     @FXML
     private Text title;
+    
+    public void initialize() {
+    	System.out.println("OOOOOOOOOOOOOOOOO");
+    	new ClientThread(this, "127.0.0.1").start();
+    }
 
 }
 
