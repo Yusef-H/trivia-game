@@ -55,7 +55,7 @@ public class ClientController {
     private Timeline timeline;
     private int scoreVal;
     
-    private static final int QUESTION_TIME = 10;
+    private static final int QUESTION_TIME = 60;
     
     public void initialize() {
     	scoreVal = 0;
@@ -96,7 +96,7 @@ public class ClientController {
                     public void handle(ActionEvent event) {
                         remainingTime--;
                         timer.setText(String.valueOf(remainingTime));
-                        if(remainingTime == 5) {
+                        if(remainingTime == 15) {
                         	title.setText("Hurry Up!");
                         }
                         
@@ -108,6 +108,7 @@ public class ClientController {
                             // Check answer and update score accordingly (assuming it's incorrect for time up)
                             boolean isCorrect = false;
                             updateScore(isCorrect);
+                            title.setText("Pick a solution then Press Confirm");
                             
                             // Move on to the next question
                             currentQuestionIndex++;
@@ -192,6 +193,7 @@ public class ClientController {
         currentQuestionIndex = 0;
         remainingTime = QUESTION_TIME;
         progressBar.setProgress(0.0);
+        scoreVal = 0;
         scoreLabel.setText("Score: 0");
         title.setText("Trivia Game");
         
