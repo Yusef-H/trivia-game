@@ -46,6 +46,8 @@ public class ClientController {
     private ProgressBar progressBar;
     @FXML
     private Label scoreLabel;
+    @FXML
+    private Button newGameButton;
     
     private ArrayList<Question> questions;
     private int currentQuestionIndex;
@@ -60,6 +62,7 @@ public class ClientController {
     	scoreLabel.setText("Score: "+scoreVal);
     	new ClientThread(this, "127.0.0.1").start();
     	title.setText("Trivia Game");
+    	newGameButton.setDisable(true);
     	
     }
     
@@ -101,8 +104,6 @@ public class ClientController {
                         	// Update the progress bar
                             double progress = progressBar.getProgress() + 0.05;
                             progressBar.setProgress(progress);
-                            // Timer expired, handle logic for time up
-                            confirmButton.setDisable(true);
                             
                             // Check answer and update score accordingly (assuming it's incorrect for time up)
                             boolean isCorrect = false;
@@ -158,6 +159,9 @@ public class ClientController {
     	    String selectedAnswer = selectedLabel.getText();
     	    System.out.println(selectedAnswer);
     	}
+    	else {
+    		return;
+    	}
 
 
         // Check if the selected answer is correct
@@ -178,17 +182,35 @@ public class ClientController {
             startTimer();
         } else {
             // All questions finished, display the final score
-        	confirmButton.setDisable(true);
             displayFinalScore();
         }
     }
     
+    @FXML
+    void newGamePressed(ActionEvent event) {
+    	// Reset the game state
+        currentQuestionIndex = 0;
+        remainingTime = QUESTION_TIME;
+        progressBar.setProgress(0.0);
+        scoreLabel.setText("Score: 0");
+        title.setText("Trivia Game");
+        
+        //start a new game
+        new ClientThread(this, "127.0.0.1").start();
+
+        // disable the new game button
+        newGameButton.setDisable(true);
+    }
+    
     
     private void displayFinalScore() {
-    	// Display the final score to the user
+    	confirmButton.setDisable(true);
+    	timeline.stop();
+    	title.setText("Press New Game to Play Again!");
+    	newGameButton.setDisable(false);
+    	
     }
 
-    // Other methods and event handlers...
 }
 
 
