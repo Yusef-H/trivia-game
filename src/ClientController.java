@@ -74,7 +74,9 @@ public class ClientController {
     	Platform.runLater(() -> {
     		String questionText = question.getQuestion();
         	this.question.setText(questionText);
-        	
+        	String[] answers = question.getShuffledAnswers();
+        	firstAnswer.setText(answers[0]);
+        	secondAnswer.setText(answers[1]);
         	
     	});	
     }

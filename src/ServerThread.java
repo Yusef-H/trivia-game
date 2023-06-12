@@ -91,72 +91,80 @@ public class ServerThread extends Thread{
 	/* Parse the Json response (contains all questions and answers) and populate
 	 * the questions list. */
 	private void parseAndPopulateQuestions(String json) {
-	    questions = new ArrayList<>();
+        questions = new ArrayList<>();
 
-	    Pattern questionPattern = Pattern.compile("\"question\":\"(.*?)\"");
-	    Pattern correctAnswerPattern = Pattern.compile("\"correct_answer\":\"(.*?)\"");
-	    Pattern incorrectAnswersPattern = Pattern.compile("\"incorrect_answers\":\\[(.*?)\\]");
+        Pattern questionPattern = Pattern.compile("\"question\":\"(.*?)\"");
+        Pattern correctAnswerPattern = Pattern.compile("\"correct_answer\":\"(.*?)\"");
+        Pattern incorrectAnswersPattern = Pattern.compile("\"incorrect_answers\":\\[(.*?)\\]");
 
-	    Matcher questionMatcher = questionPattern.matcher(json);
-	    Matcher correctAnswerMatcher = correctAnswerPattern.matcher(json);
-	    Matcher incorrectAnswersMatcher = incorrectAnswersPattern.matcher(json);
+        Matcher questionMatcher = questionPattern.matcher(json);
+        Matcher correctAnswerMatcher = correctAnswerPattern.matcher(json);
+        Matcher incorrectAnswersMatcher = incorrectAnswersPattern.matcher(json);
 
-	    while (questionMatcher.find() && correctAnswerMatcher.find() && incorrectAnswersMatcher.find()) {
-	        String question = questionMatcher.group(1);
-	        String correctAnswer = correctAnswerMatcher.group(1);
-	        String incorrectAnswersString = incorrectAnswersMatcher.group(1);
+        while (questionMatcher.find() && correctAnswerMatcher.find() && incorrectAnswersMatcher.find()) {
+            String question = questionMatcher.group(1);
+            String correctAnswer = correctAnswerMatcher.group(1);
+            String incorrectAnswersString = incorrectAnswersMatcher.group(1);
 
-	        List<String> incorrectAnswers = new ArrayList<>();
-	        Matcher incorrectAnswerMatcher = Pattern.compile("\"(.*?)\"").matcher(incorrectAnswersString);
-	        while (incorrectAnswerMatcher.find()) {
-	            incorrectAnswers.add(incorrectAnswerMatcher.group(1));
-	        }
+            // Remove HTML entities from the question and answers
+            question = removeHTMLentities(question);
+            correctAnswer = removeHTMLentities(correctAnswer);
+            List<String> incorrectAnswers = removeHTMLentities(Arrays.asList(incorrectAnswersString.split(",")));
 
-	        Question q = new Question(question, incorrectAnswers.toArray(new String[0]), correctAnswer);
-	        questions.add(q);
-	    }
+            Question q = new Question(question, incorrectAnswers.toArray(new String[0]), correctAnswer);
+            questions.add(q);
+        }
 
-	    // Print the parsed questions and answers
-	    for (Question q : questions) {
-	        System.out.println("Question: " + q.getQuestion());
-	        System.out.println("Correct Answer: " + q.getCorrectAnswer());
-	        System.out.println("Incorrect Answers: " + Arrays.toString(q.getIncorrectAnswers()));
-	        System.out.println();
-	    }
-	}
+        // Print the parsed questions and answers
+        for (Question q : questions) {
+            System.out.println("Question: " + q.getQuestion());
+            System.out.println("Correct Answer: " + q.getCorrectAnswer());
+            System.out.println("Incorrect Answers: " + Arrays.toString(q.getIncorrectAnswers()));
+            System.out.println();
+        }
+    }
 
+    private String removeHTMLentities(String text) {
+        return text.replaceAll("&quot;", "\"")
+                .replaceAll("&#039;", "'");
+    }
 
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private List<String> removeHTMLentities(List<String> texts) {
+        List<String> cleanedTexts = new ArrayList<>();
+        for (String text : texts) {
+            cleanedTexts.add(removeHTMLentities(text));
+        }
+        return cleanedTexts;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

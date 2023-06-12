@@ -1,4 +1,8 @@
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Question implements Serializable {
 	String question;
@@ -26,6 +30,14 @@ public class Question implements Serializable {
 
 	public String getCorrectAnswer() {
 		return correctAnswer;
+	}
+	
+	public String[] getShuffledAnswers() {
+		List<String> answers = new ArrayList<String>();
+        answers.add(correctAnswer);
+        answers.addAll(Arrays.asList(incorrectAnswers));
+        Collections.shuffle(answers);
+        return answers.toArray(new String[0]);
 	}
 
 
