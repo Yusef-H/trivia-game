@@ -10,11 +10,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class ClientController {
 
+	@FXML
+    private ToggleGroup answers;
     @FXML
     private Button confirmButton;
     @FXML
@@ -41,22 +44,30 @@ public class ClientController {
     private Text title;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private Label scoreLabel;
     
     private ArrayList<Question> questions;
     private int currentQuestionIndex;
     private int remainingTime;
     private Timeline timeline;
+    private int scoreVal;
+    
+    private static final int QUESTION_TIME = 10;
     
     public void initialize() {
+    	scoreVal = 0;
+    	scoreLabel.setText("Score: "+scoreVal);
     	new ClientThread(this, "127.0.0.1").start();
     	title.setText("Trivia Game");
+    	
     }
     
     public void handleQuestions(ArrayList<Question> questions) {
     	this.questions = questions;
     	this.currentQuestionIndex = 0;
     	displayQuestion(questions.get(currentQuestionIndex));
-    	remainingTime = 2; 
+    	remainingTime = QUESTION_TIME; 
     	startTimer();
     }
     
@@ -100,7 +111,7 @@ public class ClientController {
                             // Move on to the next question
                             currentQuestionIndex++;
                             if (currentQuestionIndex < questions.size()) {
-                            	remainingTime = 2; // Reset the remaining time for the next question
+                            	remainingTime = QUESTION_TIME; // Reset the remaining time for the next question
                                 displayQuestion(questions.get(currentQuestionIndex));
                                 confirmButton.setDisable(false);
                                 timeline.stop();
@@ -117,9 +128,61 @@ public class ClientController {
         timeline.play();
     }
     
+    /* Update the score based on the user's answer */
     private void updateScore(boolean isCorrect) {
-    	// Update the score based on the user's answer
+    	if(isCorrect) {
+    		scoreVal+= 10;
+    	}
+    	else {
+    		scoreVal-= 5;
+    	}
+    	scoreLabel.setText("Score: " + scoreVal);
     }
+    
+    @FXML
+    void confirmPressed(ActionEvent event) {
+    	RadioButton selectedRadioButton = (RadioButton) answers.getSelectedToggle();
+    	Label selectedLabel = null;
+
+    	if (selectedRadioButton == radio1) {
+    	    selectedLabel = firstAnswer;
+    	} else if (selectedRadioButton == radio2) {
+    	    selectedLabel = secondAnswer;
+    	} else if (selectedRadioButton == radio3) {
+    	    selectedLabel = thirdAnswer;
+    	} else if (selectedRadioButton == radio4) {
+    	    selectedLabel = fourthAnswer;
+    	}
+
+    	if (selectedLabel != null) {
+    	    String selectedAnswer = selectedLabel.getText();
+    	    System.out.println(selectedAnswer);
+    	}
+
+
+        // Check if the selected answer is correct
+        boolean isCorrect = questions.get(currentQuestionIndex).isCorrectAnswer(selectedLabel.getText());
+
+        // Update the score based on the selected answer
+        updateScore(isCorrect);
+
+        // Move on to the next question
+        currentQuestionIndex++;
+        double progress = progressBar.getProgress() + 0.05;
+        progressBar.setProgress(progress);
+        if (currentQuestionIndex < questions.size()) {
+            remainingTime = QUESTION_TIME; // Reset the remaining time for the next question
+            displayQuestion(questions.get(currentQuestionIndex));
+            confirmButton.setDisable(false);
+            timeline.stop();
+            startTimer();
+        } else {
+            // All questions finished, display the final score
+        	confirmButton.setDisable(true);
+            displayFinalScore();
+        }
+    }
+    
     
     private void displayFinalScore() {
     	// Display the final score to the user

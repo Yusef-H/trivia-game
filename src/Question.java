@@ -42,6 +42,8 @@ public class Question implements Serializable {
 
 
 	public boolean isCorrectAnswer(String answer) {
+		System.out.println("Answer: "+answer);
+		System.out.println("correctone: "+correctAnswer);
 		return answer.equals(correctAnswer);
 	}
 

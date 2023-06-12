@@ -13,16 +13,21 @@
 
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="645.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientController">
    <children>
-      <Text fx:id="title" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" />
-      <Text fx:id="timer" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer">
+      <Text fx:id="title" fill="#ff1d04" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" />
+      <Text fx:id="timer" fill="#397c2f" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer">
          <VBox.margin>
             <Insets top="20.0" />
          </VBox.margin>
       </Text>
       <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="400.0" progress="0.0" />
+      <Label fx:id="scoreLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="227.0" text="Score" textFill="RED">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
       <VBox prefHeight="536.0" prefWidth="605.0">
          <children>
-            <Label fx:id="question" alignment="CENTER" contentDisplay="CENTER" prefHeight="80.0" prefWidth="605.0" text="Question" wrapText="true">
+            <Label fx:id="question" alignment="CENTER" contentDisplay="CENTER" prefHeight="80.0" prefWidth="605.0" text="Question" textFill="#6b0fff" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -75,7 +80,7 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="confirmButton" mnemonicParsing="false" text="Confirm" />
+      <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmPressed" text="Confirm" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
