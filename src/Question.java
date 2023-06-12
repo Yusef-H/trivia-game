@@ -13,6 +13,21 @@ public class Question implements Serializable {
 		this.correctAnswer = correctAnswer;
 	}
 
+	
+	public String getQuestion() {
+		return question;
+	}
+
+
+	public String[] getIncorrectAnswers() {
+		return incorrectAnswers;
+	}
+
+
+	public String getCorrectAnswer() {
+		return correctAnswer;
+	}
+
 
 	public boolean isCorrectAnswer(String answer) {
 		return answer.equals(correctAnswer);

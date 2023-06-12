@@ -19,8 +19,7 @@ public class ClientThread extends Thread{
 		try {
 			
 			questions = getQuestionsFromServer();
-			System.out.println(questions.get(0));
-			System.out.println("aaaaaaaa");
+			controller.handleQuestions(questions);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -40,5 +39,10 @@ public class ClientThread extends Thread{
         
         return questions;
 	}
+	
+
+	
+		
+	
 
 }
