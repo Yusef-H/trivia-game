@@ -49,7 +49,7 @@ public class ServerThread extends Thread{
 	
 	/* Fetch trivia questions from API. */
 	private void fetchQuestions() {
-	    String apiUrl = "https://opentdb.com/api.php?amount=" + QUESTION_AMOUNT + "&difficulty=easy&type=multiple";
+	    String apiUrl = "https://opentdb.com/api.php?amount=" + QUESTION_AMOUNT + "&category=18&type=multiple";
 
 	    try {
 	        URL url = new URL(apiUrl);
