@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -55,22 +57,55 @@ public class ClientController {
     private Timeline timeline;
     private int scoreVal;
     
-    private static final int QUESTION_TIME = 60;
+    private int questionTime = 60;
     
     public void initialize() {
+    	String ipAddress = getIpAddress();
+    	questionTime = getTimeForQuestion();
     	scoreVal = 0;
     	scoreLabel.setText("Score: "+scoreVal);
-    	new ClientThread(this, "127.0.0.1").start();
+    	new ClientThread(this, ipAddress).start();
     	title.setText("Trivia Game");
     	newGameButton.setDisable(true);
     	
+    }
+    
+    private String getIpAddress() {
+    	TextInputDialog dialog = new TextInputDialog("127.0.0.1");
+    	dialog.setHeaderText("Enter ip address");
+    	
+    	Optional<String> ip = dialog.showAndWait();
+    	if(ip.isPresent()) {
+    		return ip.get();
+    	}
+    	else {
+    		return "127.0.0.1";
+    	}
+    }
+    
+    private int getTimeForQuestion() {
+	    TextInputDialog dialog = new TextInputDialog("20");
+	    dialog.setHeaderText("Enter time (in seconds)");
+	    dialog.setContentText("Time:");
+
+	    Optional<String> time = dialog.showAndWait();
+	    if (time.isPresent()) {
+	        try {
+	            return Integer.parseInt(time.get());
+	        } catch (NumberFormatException e) {
+	        	// incase of invalid input time, return default time.
+	            return questionTime;
+	        }
+	    }
+
+	    return questionTime; // Default time
     }
     
     public void handleQuestions(ArrayList<Question> questions) {
     	this.questions = questions;
     	this.currentQuestionIndex = 0;
     	displayQuestion(questions.get(currentQuestionIndex));
-    	remainingTime = QUESTION_TIME; 
+    	remainingTime = questionTime; 
     	startTimer();
     }
     
@@ -96,7 +131,7 @@ public class ClientController {
                     public void handle(ActionEvent event) {
                         remainingTime--;
                         timer.setText(String.valueOf(remainingTime));
-                        if(remainingTime == 15) {
+                        if(remainingTime == 10) {
                         	title.setText("Hurry Up!");
                         }
                         
@@ -113,7 +148,7 @@ public class ClientController {
                             // Move on to the next question
                             currentQuestionIndex++;
                             if (currentQuestionIndex < questions.size()) {
-                            	remainingTime = QUESTION_TIME; // Reset the remaining time for the next question
+                            	remainingTime = questionTime; // Reset the remaining time for the next question
                                 displayQuestion(questions.get(currentQuestionIndex));
                                 confirmButton.setDisable(false);
                                 timeline.stop();
@@ -176,7 +211,7 @@ public class ClientController {
         double progress = progressBar.getProgress() + 0.05;
         progressBar.setProgress(progress);
         if (currentQuestionIndex < questions.size()) {
-            remainingTime = QUESTION_TIME; // Reset the remaining time for the next question
+            remainingTime = questionTime; // Reset the remaining time for the next question
             displayQuestion(questions.get(currentQuestionIndex));
             confirmButton.setDisable(false);
             timeline.stop();
@@ -191,7 +226,7 @@ public class ClientController {
     void newGamePressed(ActionEvent event) {
     	// Reset the game state
         currentQuestionIndex = 0;
-        remainingTime = QUESTION_TIME;
+        remainingTime = questionTime;
         progressBar.setProgress(0.0);
         scoreVal = 0;
         scoreLabel.setText("Score: 0");

@@ -38,10 +38,7 @@ public class ServerThread extends Thread{
 	private void handleTriviaQuestions() throws Exception {
 		OutputStream outputStream = s.getOutputStream();
 		ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
-//		InputStream inputStream = s.getInputStream();
-//		ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
-		
-		// send questions to the client
+
 	    objOutputStream.writeObject(questions);
 	    objOutputStream.flush();
 	    
@@ -78,7 +75,7 @@ public class ServerThread extends Thread{
 	            // Parse the JSON response 
 	            String json = response.toString();
 
-	            // Pass the JSON string directly to the parsing method
+	            // Pass the JSON string to the parsing method
 	            parseAndPopulateQuestions(json);
 	        } else {
 	            System.out.println("Error: " + responseCode);
