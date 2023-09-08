@@ -2,10 +2,11 @@
 A multi threaded trivia game built with Java and Javafx.
 
 ## Pictures
-![image](https://github.com/Yusef-H/trivia-game/assets/81261114/caf53370-2205-446e-8892-ed2a30ad5a6d)
-![image](https://github.com/Yusef-H/trivia-game/assets/81261114/a4c51575-6175-445b-82dc-646be118bf2c)
+![image](https://github.com/Yusef-H/trivia-game/assets/81261114/42751bdb-2c2a-45f8-9ccf-07c2bbb0d22f)
+
 
 
 For each client theres a server thread that fetches the trivia questions from the api:
-![image](https://github.com/Yusef-H/trivia-game/assets/81261114/66a571f8-aeb4-4664-a6dc-38bc5e88c983)
+![image](https://github.com/Yusef-H/trivia-game/assets/81261114/951a86b6-4c42-4dfb-b6d4-6773f521ee06)
+
 
